@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>百分百</title>
+    <link rel="stylesheet" href="/default/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/default/assets/css/Server/admin.css">
+    <link rel="stylesheet" href="/default/assets/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/default/assets/css/formValidation.css">
+    <script type="text/javascript" src="/default/assets/js/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="/default/assets/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/default/assets/js/Server/index.js"></script>
+    <script type="text/javascript" src="/default/assets/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/default/assets/js/formValidation.js"></script>
+    <script type="text/javascript" src="/default/assets/js/bootstrapValidation.js"></script>
+</head>
+
+<body>
+    <div class="admin-header">
+        <div class="logo pull-left">百分百</div>
+        <div class="menu-top pull-left">
+            <ul class="nav nav-pills">
+                <li id="header_btnEnroll" role="presentation">报名管理</li>
+                <li id="header_btnClass" role="presentation">课程管理</li>
+                <li id="header_btnStudent" role="presentation">学生管理</li>
+                <li id="header_btnFinancial" role="presentation">财务管理</li>
+                <li id="header_btnBasic" role="presentation">基本设置</li>
+            </ul>
+        </div>
+        <div class="userinfo pull-right">
+            用户: {{ user.name }}
+            <a href="/admin/logout">退出</a>
+        </div>
+    </div>
+    <div class="admin-content">
+        <div class="admin-left">
+            {% block left %}{% endblock %}
+        </div>
+        <div class="admin-main">
+            {% block main %}{% endblock %}
+        </div>
+    </div>
+    {% block modal %}{% endblock %}
+</body>
+
+</html>
