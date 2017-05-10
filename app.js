@@ -40,14 +40,6 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-//define upload address
-// app.use(multer({
-//     dest: './public/images',
-//     rename: function(fieldname, filename) {
-//         return filename;
-//     }
-// }));
-
 app.use(cookieParser());
 //session could save in mongo store, but sometimes it doesn't work
 app.use(session({
@@ -59,9 +51,6 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     store: new MongoStore({
-        // db: settings.db,
-        // host: settings.host, 
-        // port: settings.port,
         url: 'mongodb://127.0.0.1:27017/website'
     })
 }));
