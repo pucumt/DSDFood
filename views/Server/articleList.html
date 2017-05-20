@@ -1,4 +1,4 @@
-{% extends "Server/partial/main.html" %} {% block left %} {% include "Server/partial/classSetting.html" %} {% endblock %} {% block main %}
+{% extends "Server/partial/main.html" %} {% block left %} {% include "Server/partial/left.html" %} {% endblock %} {% block main %}
 <div class="title">
     <h1>
         {{ title }}
@@ -22,7 +22,12 @@
     </div>
 </div>
 <div class="toolbar">
-    <div class="toolbar-list">
+    <div class="toolbar-list form-inline">
+        <div class="checkbox">
+            <label>
+      <input type="checkbox" id="selectAll">全选
+    </label>
+        </div>
         <button id="btnAdd" class="btn btn-default btn-sm">新增</button>
         <button id="btnDeleteAll" class="btn btn-default btn-sm">删除选中</button>
         <button id="btnPublishAll" class="btn btn-default btn-sm">发布选中</button>
@@ -33,7 +38,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>课程名称</th>
+                <th>文章名称</th>
                 <th style="width:80px">状态</th>
                 <th style="width:100px">时间</th>
             </tr>

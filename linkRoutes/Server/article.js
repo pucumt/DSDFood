@@ -1,11 +1,20 @@
 var Article = require('../../models/article.js'),
     auth = require("./auth"),
+    settings = require('../../settings.js'),
     checkLogin = auth.checkLogin;
 
 module.exports = function(app) {
     app.get('/admin/articleList', checkLogin);
     app.get('/admin/articleList', function(req, res) {
         res.render('Server/articleList.html', {
+            title: '>文章列表',
+            user: req.session.admin
+        });
+    });
+
+    app.get('/admin/articleList/add', checkLogin);
+    app.get('/admin/articleList/add', function(req, res) {
+        res.render('Server/articleEdit.html', {
             title: '>文章列表',
             user: req.session.admin
         });
@@ -118,50 +127,24 @@ module.exports = function(app) {
 
     app.post('/admin/articleList/search', checkLogin);
     app.post('/admin/articleList/search', function(req, res) {
-        // //判断是否是第一页，并把请求的页数转换成 number 类型
-        // var page = req.query.p ? parseInt(req.query.p) : 1;
-        // //查询并返回第 page 页的 20 篇文章
-        // var filter = {};
-        // if (req.body.name) {
-        //     var reg = new RegExp(req.body.name, 'i')
-        //     filter.name = {
-        //         $regex: reg
-        //     };
-        // }
-        // if (req.body.school) {
-        //     filter.schoolArea = req.body.school;
-        // }
-        // if (req.body.gradeName) {
-        //     filter.gradeName = req.body.gradeName;
-        // }
-        // if (req.body.grade) {
-        //     filter.gradeId = req.body.grade;
-        // }
-        // if (req.body.subject) {
-        //     filter.subjectId = req.body.subject;
-        // }
-        // if (req.body.category) {
-        //     filter.categoryId = req.body.category;
-        // }
-        // if (req.body.yearId) {
-        //     filter.yearId = req.body.yearId;
-        // } else { //当前年度的课程
-        //     if (global.currentYear) {
-        //         filter.yearId = global.currentYear._id;
-        //     }
-        // }
-
-        // TrainClass.getAll(null, page, filter, function(err, trainClasss, total) {
-        //     if (err) {
-        //         trainClasss = [];
-        //     }
-        //     res.jsonp({
-        //         trainClasss: trainClasss,
-        //         total: total,
-        //         page: page,
-        //         isFirstPage: (page - 1) == 0,
-        //         isLastPage: ((page - 1) * 14 + trainClasss.length) == total
-        //     });
-        // });
+        //判断是否是第一页，并把请求的页数转换成 number 类型
+        var page = req.query.p ? parseInt(req.query.p) : 1;
+        //查询并返回第 page 页的 20 篇文章
+        var filter = {};
+        if (req.body.name) {
+            var reg = new RegExp(req.body.name, 'i')
+            filter.name = {
+                $regex: reg
+            };
+        }
+        Article.getAll(page, filter).then(function(result) {
+            res.jsonp({
+                articles: result.articles,
+                count: result.count,
+                page: page,
+                isFirstPage: (page - 1) == 0,
+                isLastPage: ((page - 1) * settings.gridlineCount + result.articles.length) == result.count
+            });
+        });
     });
 }
