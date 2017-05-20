@@ -2,9 +2,28 @@ var User = require('../../models/user.js'),
     auth = require("./auth"),
     settings = require('../../settings.js'),
     checkLogin = auth.checkLogin,
-    checkJSONLogin = auth.checkJSONLogin;
+    checkJSONLogin = auth.checkJSONLogin,
+    crypto = require('crypto');
 
 module.exports = function(app) {
+    function autoAdduser() {
+        User.getbyName("dsdAdmin")
+            .then(function(user) {
+                if (user) {
+                    return;
+                } else {
+                    var md5 = crypto.createHash('md5'),
+                        password = md5.update("dsdAdmin111").digest('hex');
+                    var user = new User({
+                        name: "dsdAdmin",
+                        password: password,
+                        role: "admin"
+                    });
+                    user.save();
+                }
+            });
+    };
+
     app.get('/admin/userList', checkLogin);
     app.get('/admin/userList', function(req, res) {
         res.render('Server/userList.html', {
@@ -71,4 +90,6 @@ module.exports = function(app) {
             });
         });
     });
+
+    autoAdduser();
 }

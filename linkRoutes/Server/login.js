@@ -28,7 +28,7 @@ module.exports = function(app) {
             }
             //用户名密码都匹配后，将用户信息存入 session
             req.session.admin = user;
-            res.redirect('/admin/adminEnrollTrainList'); //登陆成功后跳转到主页
+            res.redirect('/admin/articleList'); //登陆成功后跳转到主页
         });
     });
 }
