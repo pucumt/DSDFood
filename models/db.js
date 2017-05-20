@@ -21,4 +21,5 @@ process.on('SIGINT', function() {
     });
 });
 
+mongoose.gridlineCount = settings.gridlineCount;
 module.exports = mongoose;

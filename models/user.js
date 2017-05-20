@@ -1,9 +1,10 @@
-var crypto = require('crypto');
-var mongoose = require('./db');
-var db = mongoose.connection;
+var crypto = require('crypto'),
+    mongoose = require('./db'),
+    db = mongoose.connection,
+    gridlineCount = mongoose.gridlineCount;
 
 var userSchema = new mongoose.Schema({
-    email: String,
+    name: String, //email
     password: String,
     mobile: String,
     role: { type: String, default: "admin" },
@@ -22,70 +23,69 @@ function User(option) {
 module.exports = User;
 
 //存储用户信息
-User.prototype.save = function(callback) {
+User.prototype.save = function() {
     //打开数据库
     var newUser = new userModel(this.option);
-
-    newUser.save(function(err, user) {
-        if (err) {
-            return callback(err);
-        }
-        callback(null, user);
-
-        //db.close();
-    });
+    return newUser.save();
 };
 
-User.prototype.update = function(callback) {
-    userModel.update({
-        name: this.option.name
-    }, this.option).exec(function(err, user) {
-        if (err) {
-            return callback(err);
-        }
-        callback(null, user);
-    });
+User.prototype.update = function(id) {
+    return userModel.update({
+        _id: id
+    }, this.option).exec();
 };
 
 //读取用户信息
-User.get = function(name, callback) {
+User.get = function(id) {
     //打开数据库
-    userModel.findOne({ name: name, isDeleted: { $ne: true } }, function(err, user) {
-        if (err) {
-            return callback(err);
-        }
-        callback(null, user);
-
-        //db.close();
-    });
+    return userModel.findOne({ _id: id });
 };
 
-//一次获取所有用户信息
-User.getAll = function(name, page, filter, callback) {
-    if (filter) {
-        filter.isDeleted = { $ne: true };
-    } else {
-        filter = { isDeleted: { $ne: true } };
+//读取用户信息
+User.getbyName = function(name) {
+    //打开数据库
+    return userModel.findOne({ name: name, isDeleted: false });
+};
+
+User.getFilter = function(filter) {
+    if (!filter) {
+        filter = {};
     }
-    var query = userModel.count(filter);
-    query.exec(function(err, count) {
-        query.find()
-            .exec(function(err, users) {
-                callback(null, users, count);
-            });
-    });
+    filter.isDeleted = false;
+    //打开数据库
+    return userModel.findOne(filter);
+};
+
+User.getFilters = function(filter) {
+    if (!filter) {
+        filter = {};
+    }
+    filter.isDeleted = false;
+    //打开数据库
+    return userModel.find(filter);
 };
 
 //删除一个用户
-User.delete = function(name, callback) {
-    userModel.update({
-        name: name
+User.delete = function(id) {
+    return userModel.update({
+        _id: id
     }, {
         isDeleted: true
-    }).exec(function(err, user) {
-        if (err) {
-            return callback(err);
-        }
-        callback(null, user);
+    }).exec();
+};
+
+User.getAll = function(page, filter) {
+    if (!filter) {
+        filter = {};
+    }
+    filter.isDeleted = false;
+    var query = userModel.count(filter);
+    return query.exec().then(function(count) {
+        return query.find()
+            .skip((page - 1) * gridlineCount)
+            .limit(gridlineCount)
+            .exec().then(function(users) {
+                return { users: users, count: count };
+            });
     });
 };

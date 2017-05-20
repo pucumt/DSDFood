@@ -23,7 +23,7 @@ var path = require('path'),
 
     app = express();
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 2369);
 app.set('views', path.join(__dirname, 'views'));
 nunjucks.configure('views', {
     autoescape: true,
@@ -49,10 +49,13 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24 * 30
     }, //30 days
     resave: false,
-    saveUninitialized: true,
-    store: new MongoStore({
-        url: 'mongodb://127.0.0.1:27017/website'
-    })
+    saveUninitialized: true //,
+        // store: new MongoStore({
+        //     // db: settings.db,
+        //     // host: settings.host, 
+        //     // port: settings.port,
+        //     url: 'mongodb://' + settings.host + ':' + settings.port + '/' + settings.db
+        // })
 }));
 //app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));

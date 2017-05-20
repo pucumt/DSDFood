@@ -11,6 +11,14 @@ module.exports = {
         }
         next();
     },
+    checkJSONLogin: function(req, res, next) {
+        if (!req.session.admin) {
+            req.session.originalUrl = req.body.originalUrl;
+            res.json({ notLogin: true });
+            return;
+        }
+        next();
+    },
     checkNotLogin: function(req, res, next) {
         //if (req.session.admin && req.session.admin.name == "11") {
         if (req.session.admin) {
