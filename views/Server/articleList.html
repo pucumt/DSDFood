@@ -10,26 +10,8 @@
             <div class="row form-horizontal">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="className" class="control-label">课程:</label>
-                        <input type="text" maxlength="30" class="form-control" name="className" id="className">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="searchSchool" class="control-label">校区:</label>
-                        <input type="text" maxlength="30" class="form-control" name="searchSchool" id="searchSchool">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="searchGrade" class="control-label">年级:</label>
-                        <input type="text" maxlength="30" class="form-control" name="searchGrade" id="searchGrade">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="searchYear" class="control-label">年度:</label>
-                        <select name="searchYear" id="searchYear" class="form-control"></select>
+                        <label for="name" class="control-label">名称:</label>
+                        <input type="text" maxlength="30" class="form-control" name="name" id="name">
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -45,9 +27,6 @@
         <button id="btnDeleteAll" class="btn btn-default btn-sm">删除选中</button>
         <button id="btnPublishAll" class="btn btn-default btn-sm">发布选中</button>
         <button id="btnStopAll" class="btn btn-default btn-sm">停用选中</button>
-        <button id="btnBatchAdd" class="btn btn-default btn-sm">批量新增</button>
-        <button id="btnBatchPublish" class="btn btn-default btn-sm">批量发布</button>
-        <button id="btnBatchAddStudent" class="btn btn-default btn-sm">批量添加学生</button>
     </div>
 </div>
 <div class="content mainModal">
@@ -55,14 +34,8 @@
         <thead>
             <tr>
                 <th>课程名称</th>
-                <th style="width:80px">发布</th>
-                <th style="width:80px">培训费</th>
-                <th style="width:80px">教材费</th>
-                <th style="width:100px">年级</th>
-                <th style="width:100px">科目</th>
-                <th style="width:100px">类别</th>
-                <th style="width:100px">报名</th>
-                <th style="width:240px">操作</th>
+                <th style="width:80px">状态</th>
+                <th style="width:100px">时间</th>
             </tr>
         </thead>
         <tbody id="gridBody">
@@ -73,240 +46,8 @@
     <input type="hidden" id="total" value="0" />
     <input type="hidden" id="page" value="0" /> {% include "Server/partial/popuppaging.html" %}
 </div> {% endblock %} {% block modal %}
+
 <!-- Modal -->
-<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="name" class="control-label">课程名称:</label>
-                                <input type="text" maxlength="30" class="form-control" name="name" id="name">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="year" class="control-label">年度:</label>
-                                <select name="year" id="year" class="form-control"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="grade" class="control-label">年级:</label>
-                                <select name="grade" id="grade" class="form-control"></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="subject" class="control-label">科目:</label>
-                                <select name="subject" id="subject" class="form-control"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="category" class="control-label">难度:</label>
-                                <select name="category" id="category" class="form-control"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="trainPrice" class="control-label">培训费:</label>
-                                <input type="text" maxlength="10" class="form-control" name="trainPrice" id="trainPrice" value="0">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="materialPrice" class="control-label">教材费:</label>
-                                <input type="text" maxlength="10" class="form-control" name="materialPrice" id="materialPrice" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="courseStartDate" class="control-label">开课日期:</label>
-                                <input type="text" maxlength="30" class="form-control" name="courseStartDate" id="courseStartDate">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="courseEndDate" class="control-label">结课日期:</label>
-                                <input type="text" maxlength="30" class="form-control" name="courseEndDate" id="courseEndDate">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="courseTime" class="control-label">上课时间:</label>
-                                <input type="text" maxlength="20" class="form-control" name="courseTime" id="courseTime">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="totalStudentCount" class="control-label">招生人数:</label>
-                                <input type="text" maxlength="10" class="form-control" name="totalStudentCount" id="totalStudentCount" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="totalClassCount" class="control-label">课时总数:</label>
-                                <input type="text" maxlength="30" class="form-control" name="totalClassCount" id="totalClassCount" value="0">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="classRoom" class="control-label">教室:</label>
-                                <div class="btn-group">
-                                    <input type="hidden" class="form-control" name="classRoomid" id="classRoomid">
-                                    <input type="text" maxlength="30" class="form-control" readonly name="classRoom" id="classRoom">
-                                    <button type="button" id="modal_btnClassRoom" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="school" class="control-label">校区:</label>
-                                <input type="hidden" class="form-control" name="schoolid" id="schoolid">
-                                <input type="text" readonly maxlength="30" class="form-control" name="school" id="school">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="teacher" class="control-label">任课老师:</label>
-                                <div class="btn-group">
-                                    <input type="hidden" class="form-control" name="teacherid" id="teacherid">
-                                    <input type="text" readonly maxlength="30" class="form-control" name="teacher" id="teacher">
-                                    <button type="button" id="modal_btnTeacher" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="totalClassCount" class="control-label">优惠属性:</label>
-                                <select name="classAttribute" id="classAttribute" class="form-control"></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-24">
-                            <div class="form-group">
-                                <label for="courseContent" class="control-label">课程描述:</label>
-                                <textarea maxlength="1000" rows="7" class="form-control" name="courseContent" id="courseContent"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-24">
-                            <div class="form-group" style="border-bottom: 1px solid rgb(128, 128, 128)">
-                                <label>依赖项:</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="examList">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="examCategoryName" class="control-label">测试类别:</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="minScore" class="control-label">最低分:</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group" style="margin-bottom: -15px;">
-                                    <button id="btnNewExam" class="btn btn-primary">新增测试</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <select name="examName" class="form-control"></select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input type="text" maxlength="10" class="form-control" name="minScore" value="0">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="extraExams"></div>
-                    </div>
-                    <input type="hidden" class="form-control" name="id" id="id">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" id="btnSave" class="btn btn-primary">保存</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade bs-example-modal-dialog" id="selectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="selectModalLabel">选择</h4>
-            </div>
-            <div class="modal-body">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <form id="InfoSearch">
-                            <div class="row form-horizontal">
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label for="Name" class="control-label">姓名:</label>
-                                        <input type="text" maxlength="30" class="form-control" name="Name" id="Name">
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <button type="button" id="btnSearch" class="btn btn-primary panelButton">查询</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th style="width:50%">教室名称</th>
-                            <th>校区</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <input type="hidden" id="total" value="0" />
-                <input type="hidden" id="page" value="0" /> {% include "Server/partial/popuppaging.html" %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade bs-example-modal-sm" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -315,7 +56,7 @@
                 <h4 class="modal-title" id="confirmModalLabel">确认</h4>
             </div>
             <div class="modal-body">
-                确定要删除吗?
+                出错了?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

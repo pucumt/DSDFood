@@ -3,50 +3,18 @@ var isNew = true,
 
 $(document).ready(function() {
     $("#left_btnTrainClass").addClass("active");
-    $("#myModal").find(".modal-content").draggable(); //为模态对话框添加拖拽
-    $("#myModal").css("overflow", "hidden"); //禁止模态对话框的半透明背景滚动
-    $("#selectModal").css("overflow", "hidden"); //禁止模态对话框的半透明背景滚动
+    $("#confirmModal").find(".modal-content").draggable(); //为模态对话框添加拖拽
+    $("#confirmModal").css("overflow", "hidden"); //禁止模态对话框的半透明背景滚动
+    $("#confirmModal").find(".modal-body").css("overflow-y", "auto"); //竖滚动条自动出现
 
-    $("#myModal").find(".modal-body").css("overflow-y", "auto");
-
-    $("#courseStartDate").datepicker({
-        changeMonth: true,
-        dateFormat: "yy-mm-dd"
-    });
-
-    $("#courseEndDate").datepicker({
-        changeMonth: true,
-        dateFormat: "yy-mm-dd"
-    });
-
-    renderSearchYearDropDown(); //search class after get years
-    $("#btnBatchAdd").on("click", function(e) {
-        location.href = "/admin/batchTrainClass";
-    });
-    $("#btnBatchPublish").on("click", function(e) {
-        location.href = "/admin/batchTrainClasspublish";
-    });
-    $("#btnBatchAddStudent").on("click", function(e) {
-        location.href = "/admin/batchAddStudentToTrainClass";
-    });
+    searchArticle();
 });
 
 //------------search funfunction
-function renderSearchYearDropDown() {
-    $.post("/admin/year/all", function(data) {
-        if (data && data.length > 0) {
-            data.forEach(function(year) {
-                $(".mainModal #InfoSearch #searchYear").append("<option value='" + year._id + "'>" + year.name + "</option>");
-            });
-        };
-        searchClass();
-    });
-};
-
 var $mainSelectBody = $('.content.mainModal table tbody');
 var getButtons = function(isWeixin) {
     var buttons = '<a class="btn btn-default btnEdit">编辑</a><a class="btn btn-default btnDelete">删除</a><a class="btn btn-default btnUpgrade">升班链接</a>';
-    if (isWeixin == 1) {
+    if (isPublish == 1) {
         buttons += '<a class="btn btn-default btnUnPublish">停用</a>';
     } else {
         buttons += '<a class="btn btn-default btnPublish">发布</a>';
@@ -54,7 +22,7 @@ var getButtons = function(isWeixin) {
     return buttons;
 };
 var getClassStatus = function(isWeixin) {
-    if (isWeixin == 1) {
+    if (isPublish == 1) {
         return "发布";
     } else if (isWeixin == 9) {
         return "停用";
