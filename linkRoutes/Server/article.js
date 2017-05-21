@@ -15,7 +15,7 @@ module.exports = function(app) {
     app.get('/admin/articleList/add', checkLogin);
     app.get('/admin/articleList/add', function(req, res) {
         res.render('Server/articleEdit.html', {
-            title: '>文章列表',
+            title: '>文章编辑',
             user: req.session.admin
         });
     });
