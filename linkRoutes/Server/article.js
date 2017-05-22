@@ -1,6 +1,7 @@
 var Article = require('../../models/article.js'),
     auth = require("./auth"),
     settings = require('../../settings.js'),
+    checkJSONLogin = auth.checkJSONLogin,
     checkLogin = auth.checkLogin;
 
 module.exports = function(app) {
@@ -20,82 +21,63 @@ module.exports = function(app) {
         });
     });
 
-    app.post('/admin/articleList/add', checkLogin);
+    app.get('/admin/articleList/id/:id', checkLogin);
+    app.get('/admin/articleList/id/:id', function(req, res) {
+        res.render('Server/articleEdit.html', {
+            title: '>文章编辑',
+            user: req.session.admin,
+            id: req.params.id
+        });
+    });
+
+    app.post('/admin/articleList/add', checkJSONLogin);
     app.post('/admin/articleList/add', function(req, res) {
-        // var article = new Article({
-        //     name: req.body.name,
-        //     yearId: req.body.yearId,
-        //     yearName: req.body.yearName,
-        //     gradeId: req.body.gradeId,
-        //     gradeName: req.body.gradeName,
-        //     subjectId: req.body.subjectId,
-        //     subjectName: req.body.subjectName,
-        //     categoryId: req.body.categoryId,
-        //     categoryName: req.body.categoryName,
-        //     totalStudentCount: req.body.totalStudentCount, //招生人数
-        //     totalClassCount: req.body.totalClassCount, //共多少课时
-        //     trainPrice: req.body.trainPrice,
-        //     materialPrice: req.body.materialPrice,
-        //     teacherId: req.body.teacherId,
-        //     teacherName: req.body.teacherName,
-        //     attributeId: req.body.attributeId,
-        //     attributeName: req.body.attributeName,
-        //     courseStartDate: req.body.courseStartDate,
-        //     courseEndDate: req.body.courseEndDate,
-        //     courseTime: req.body.courseTime,
-        //     courseContent: req.body.courseContent,
-        //     classRoomId: req.body.classRoomId,
-        //     classRoomName: req.body.classRoomName,
-        //     schoolId: req.body.schoolId,
-        //     schoolArea: req.body.schoolArea,
-        //     isWeixin: 0,
-        //     enrollCount: 0,
-        //     exams: JSON.parse(req.body.exams)
-        // });
+        var article = new Article({
+            name: req.body.name,
+            food: JSON.parse(req.body.food),
+            content: JSON.parse(req.body.content),
+            createdBy: req.session.admin._id
+        });
 
-        // Article.save().then(function(tclass) {
-        //     res.jsonp(tclass);
-        // });
+        article.save().then(function(article) {
+            if (article) {
+                res.json({ sucess: true, id: article._id });
+            }
+        }).catch(function(err) {
+            console.log(err);
+        });
     });
 
-    app.post('/admin/articleList/edit', checkLogin);
+    app.post('/admin/articleList/edit', checkJSONLogin);
     app.post('/admin/articleList/edit', function(req, res) {
-        // var trainClass = new TrainClass({
-        //     name: req.body.name,
-        //     yearId: req.body.yearId,
-        //     yearName: req.body.yearName,
-        //     gradeId: req.body.gradeId,
-        //     gradeName: req.body.gradeName,
-        //     subjectId: req.body.subjectId,
-        //     subjectName: req.body.subjectName,
-        //     categoryId: req.body.categoryId,
-        //     categoryName: req.body.categoryName,
-        //     totalStudentCount: req.body.totalStudentCount, //招生人数
-        //     totalClassCount: req.body.totalClassCount, //共多少课时
-        //     trainPrice: req.body.trainPrice,
-        //     materialPrice: req.body.materialPrice,
-        //     teacherId: req.body.teacherId,
-        //     teacherName: req.body.teacherName,
-        //     attributeId: req.body.attributeId,
-        //     attributeName: req.body.attributeName,
-        //     courseStartDate: req.body.courseStartDate,
-        //     courseEndDate: req.body.courseEndDate,
-        //     courseTime: req.body.courseTime,
-        //     courseContent: req.body.courseContent,
-        //     classRoomId: req.body.classRoomId,
-        //     classRoomName: req.body.classRoomName,
-        //     schoolId: req.body.schoolId,
-        //     schoolArea: req.body.schoolArea,
-        //     exams: JSON.parse(req.body.exams)
-        // });
+        var article = new Article({
+            name: req.body.name,
+            food: JSON.parse(req.body.food),
+            content: JSON.parse(req.body.content),
+            createdBy: req.session.admin._id
+        });
 
-        // trainClass.update(req.body.id)
-        //     .then(function() {
-        //         res.jsonp(trainClass);
-        //     });
+        article.update(req.body.id).then(function(result) {
+            if (result && result.ok && result.nModified == 1) {
+                res.json({ sucess: true, id: req.body.id });
+            }
+        }).catch(function(err) {
+            console.log(err);
+        });
     });
 
-    app.post('/admin/articleList/delete', checkLogin);
+    app.post('/admin/articleList/id/:id', checkJSONLogin);
+    app.post('/admin/articleList/id/:id', function(req, res) {
+        Article.get(req.params.id).then(function(article) {
+            if (article) {
+                res.json(article);
+            } else {
+                res.json(false);
+            }
+        })
+    });
+
+    app.post('/admin/articleList/delete', checkJSONLogin);
     app.post('/admin/articleList/delete', function(req, res) {
         // TrainClass.delete(req.body.id, function(err, trainClass) {
         //     if (err) {
@@ -106,7 +88,7 @@ module.exports = function(app) {
         // });
     });
 
-    app.post('/admin/articleList/publishAll', checkLogin);
+    app.post('/admin/articleList/publishAll', checkJSONLogin);
     app.post('/admin/articleList/publishAll', function(req, res) {
         // TrainClass.publishAll(JSON.parse(req.body.ids), function(err, trainClass) {
         //     if (err) {
@@ -117,7 +99,7 @@ module.exports = function(app) {
         // });
     });
 
-    app.post('/admin/articleList/deleteAll', checkLogin);
+    app.post('/admin/articleList/deleteAll', checkJSONLogin);
     app.post('/admin/articleList/deleteAll', function(req, res) {
         // TrainClass.deleteAll(JSON.parse(req.body.ids))
         //     .then(function() {
@@ -125,7 +107,7 @@ module.exports = function(app) {
         //     });
     });
 
-    app.post('/admin/articleList/search', checkLogin);
+    app.post('/admin/articleList/search', checkJSONLogin);
     app.post('/admin/articleList/search', function(req, res) {
         //判断是否是第一页，并把请求的页数转换成 number 类型
         var page = req.query.p ? parseInt(req.query.p) : 1;

@@ -1,15 +1,23 @@
 var crypto = require('crypto'),
     mongoose = require('./db'),
     db = mongoose.connection,
-    gridlineCount = mongoose.gridlineCount;
+    gridlineCount = mongoose.gridlineCount,
+    ObjectId = mongoose.Schema.Types.ObjectId;
 
 var articleSchema = new mongoose.Schema({
     name: String, //email
-    content: String,
+    food: [{
+        foodName: String,
+        foodWeight: String
+    }],
+    content: [{
+        stepDescription: String,
+        stepImages: String
+    }],
     isPublish: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
     createdDate: { type: Date, default: Date.now },
-    createdBy: String,
+    createdBy: ObjectId,
     publishedBy: String
 }, {
     collection: 'articles'

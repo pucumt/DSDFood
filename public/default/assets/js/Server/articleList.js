@@ -12,24 +12,12 @@ $(document).ready(function() {
 
 //------------search funfunction
 var $mainSelectBody = $('.content.mainModal table tbody');
-var getButtons = function(isWeixin) {
-    var buttons = '<a class="btn btn-default btnEdit">编辑</a><a class="btn btn-default btnDelete">删除</a><a class="btn btn-default btnUpgrade">升班链接</a>';
-    if (isPublish == 1) {
-        buttons += '<a class="btn btn-default btnUnPublish">停用</a>';
-    } else {
-        buttons += '<a class="btn btn-default btnPublish">发布</a>';
-    }
-    return buttons;
-};
-var getClassStatus = function(isWeixin) {
+var getClassStatus = function(isPublish) {
     if (isPublish == 1) {
         return "发布";
-    } else if (isWeixin == 9) {
-        return "停用";
     } else {
-        return "新建";
+        return "停用";
     }
-
 };
 
 function searchArticle(p) {
@@ -40,14 +28,11 @@ function searchArticle(p) {
     $mainSelectBody.empty();
     $.post("/admin/articleList/search?" + pStr, filter, function(data) {
         $mainSelectBody.empty();
-        if (data && data.trainClasss.length > 0) {
+        if (data && data.articles.length > 0) {
             var d = $(document.createDocumentFragment());
-            data.trainClasss.forEach(function(trainClass) {
-                var trObject = $('<tr id=' + trainClass._id + '><td><span><input type="checkbox" name="trainId" value=' + trainClass._id + ' /></span>' + trainClass.name + '</td><td>' +
-                    getClassStatus(trainClass.isWeixin) + '</td><td>' + trainClass.trainPrice + '</td><td>' + trainClass.materialPrice +
-                    '</td><td>' + trainClass.gradeName + '</td><td>' + trainClass.subjectName + '</td><td>' +
-                    trainClass.categoryName + '</td><td>' + trainClass.enrollCount + '/' + trainClass.totalStudentCount + '</td><td><div class="btn-group">' + getButtons(trainClass.isWeixin) + '</div></td></tr>');
-                trObject.find(".btn-group").data("obj", trainClass);
+            data.articles.forEach(function(article) {
+                var trObject = $('<tr id=' + article._id + '><td><span><input type="checkbox" name="articleId" value=' + article._id + ' /></span>' + article.name + '</td><td>' +
+                    getClassStatus(article.isPublish) + '</td><td>' + moment(article.createdDate).format("YYYY-MM-DD HH:mm:ss") + '</td><td><div class="btn-group"><a class="btn btn-default btnEdit">编辑</a></div></td></tr>');
                 d.append(trObject);
             });
             $mainSelectBody.append(d);
@@ -81,13 +66,13 @@ $("#btnAdd").on("click", function(e) {
 
 $(".content.mainModal #gridBody").on("click", "td .btnEdit", function(e) {
     //go to edit page
-    location.href = "/admin/articleList/id/" + "111";
+    location.href = "/admin/articleList/id/" + $(e.currentTarget).parents("tr").attr("id");
 });
 //------------end
 
 function getAllCheckedRecords() {
     var trainIds = [];
-    $(".mainModal #gridBody [name='trainId']")
+    $(".mainModal #gridBody [name='articleId']")
         .each(function(index) {
             if (this.checked) {
                 trainIds.push($(this).val());
