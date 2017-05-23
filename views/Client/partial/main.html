@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>百分百</title>
+    <link rel="stylesheet" href="/default/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/default/assets/css/Client/main.css">
+    <link rel="stylesheet" href="/default/assets/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/default/assets/css/formValidation.css">
+    <script type="text/javascript" src="/default/assets/js/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="/default/assets/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/default/assets/js/Client/index.js?v=1.000"></script>
+    <script type="text/javascript" src="/default/assets/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/default/assets/js/formValidation.js"></script>
+    <script type="text/javascript" src="/default/assets/js/bootstrapValidation.js"></script>
+</head>
+
+<body>
+    <header class="guest-header">
+        <div class="logo pull-left">百分百</div>
+        <div class="menu-top pull-left">
+        </div>
+        <div class="userinfo pull-right">
+            用户: {{ user.name }}
+            <a href="/admin/logout">退出</a>
+        </div>
+    </header>
+    <div class="guest-content">
+        <div class="admin-main">
+            {% block main %}{% endblock %}
+        </div>
+    </div>
+    <footer class="guest-footer">
+        <div>
+            foot
+        </div>
+    </footer>
+    {% block modal %}{% endblock %}
+</body>
+
+</html>

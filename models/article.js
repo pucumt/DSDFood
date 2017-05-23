@@ -8,7 +8,8 @@ var articleSchema = new mongoose.Schema({
     name: String, //email
     food: [{
         foodName: String,
-        foodWeight: String
+        foodWeight: String,
+        materialId: ObjectId
     }],
     content: [{
         stepDescription: String,
