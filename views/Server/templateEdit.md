@@ -41,8 +41,8 @@
             <div class="row step">
                 <div class="col-md-24">
                     <div class="form-group">
-                        <label for="articleContent" class="control-label description">方法步驟1:</label>
-                        <div class="wpeditor" name="articleContent" id="articleContent" contentEditable="true"></div>
+                        <label for="#name#Content" class="control-label description">方法步驟1:</label>
+                        <div class="wpeditor" name="#name#Content" id="#name#Content" contentEditable="true"></div>
                     </div>
                 </div>
                 <div class="col-md-24 ">
@@ -72,6 +72,6 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/default/assets/js/Server/article.edit.js?v=1.000"></script>
+<script type="text/javascript" src="/default/assets/js/Server/#name#.edit.js?v=1.000"></script>
 <script type="text/javascript" src="/default/assets/js/WPEditor.js"></script>
 {% endblock %}

@@ -2,11 +2,11 @@ var isNew = true,
     fullExams;
 
 $(document).ready(function() {
-    $("#left_btnArticleAdd").addClass("active");
+    $("#left_btn#Name#List").addClass("active");
     $("#confirmModal").find(".modal-content").draggable(); //为模态对话框添加拖拽
     $("#confirmModal").css("overflow", "hidden"); //禁止模态对话框的半透明背景滚动
     $("#confirmModal").find(".modal-body").css("overflow-y", "auto"); //竖滚动条自动出现
-    // var editor = new WPEditor($("#articleContent"));
+    // var editor = new WPEditor($("##name#Content"));
     var cloneStep = $(".step").clone(),
         cloneFood = $(".food").clone();
 
@@ -49,14 +49,14 @@ $(document).ready(function() {
     $(".toolbar #btnSave").on("click", function(e) {
         // var validator = $('.mainModal').data('formValidation').validate();
         // if (validator.isValid()) {
-        var postURI = "/admin/articleList/add",
+        var postURI = "/admin/#name#List/add",
             postObj = {
                 name: $.trim($('.mainModal #name').val()),
                 food: getFoods(),
                 content: getContents()
             };
         if ($("#id").val() != "") {
-            postURI = "/admin/articleList/edit";
+            postURI = "/admin/#name#List/edit";
             postObj.id = $('#id').val();
         }
         $.post(postURI, postObj, function(data) {
@@ -136,8 +136,8 @@ $(document).ready(function() {
         }
     };
 
-    function loadArticle() {
-        $.post("/admin/articleList/id/" + $("#id").val(), function(data) {
+    function load#Name#() {
+        $.post("/admin/#name#List/id/" + $("#id").val(), function(data) {
             if (data) {
                 $('.mainModal #name').val(data.name);
                 if (data.food && data.food.length > 0) {
@@ -162,6 +162,6 @@ $(document).ready(function() {
     };
 
     if ($("#id").val() != "") {
-        loadArticle()
+        load#Name#()
     }
 });

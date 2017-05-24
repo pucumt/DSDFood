@@ -4,12 +4,11 @@ var crypto = require('crypto'),
     gridlineCount = mongoose.gridlineCount,
     ObjectId = mongoose.Schema.Types.ObjectId;
 
-var articleSchema = new mongoose.Schema({
+var #name#Schema = new mongoose.Schema({
     name: String, //email
     food: [{
         foodName: String,
-        foodWeight: String,
-        materialId: ObjectId
+        foodWeight: String
     }],
     content: [{
         stepDescription: String,
@@ -21,103 +20,103 @@ var articleSchema = new mongoose.Schema({
     createdBy: ObjectId,
     publishedBy: String
 }, {
-    collection: 'articles'
+    collection: '#name#s'
 });
 
-var articleModel = mongoose.model('Article', articleSchema);
+var #name#Model = mongoose.model('#Name#', #name#Schema);
 
-function Article(option) {
+function #Name#(option) {
     this.option = option;
 };
 
-module.exports = Article;
+module.exports = #Name#;
 
 //存储用户信息
-Article.prototype.save = function() {
+#Name#.prototype.save = function() {
     //打开数据库
-    var newArticle = new articleModel(this.option);
-    return newArticle.save();
+    var new#Name# = new #name#Model(this.option);
+    return new#Name#.save();
 };
 
-Article.prototype.update = function(id) {
-    return articleModel.update({
+#Name#.prototype.update = function(id) {
+    return #name#Model.update({
         _id: id
     }, this.option).exec();
 };
 
 //读取用户信息
-Article.get = function(id) {
+#Name#.get = function(id) {
     //打开数据库
-    return articleModel.findOne({ _id: id });
+    return #name#Model.findOne({ _id: id });
 };
 
 //读取用户信息
-Article.getbyName = function(name) {
+#Name#.getbyName = function(name) {
     //打开数据库
-    return articleModel.findOne({ name: name, isDeleted: false });
+    return #name#Model.findOne({ name: name, isDeleted: false });
 };
 
-Article.getFilter = function(filter) {
+#Name#.getFilter = function(filter) {
     if (!filter) {
         filter = {};
     }
     filter.isDeleted = false;
     //打开数据库
-    return articleModel.findOne(filter);
+    return #name#Model.findOne(filter);
 };
 
-Article.getFilters = function(filter) {
+#Name#.getFilters = function(filter) {
     if (!filter) {
         filter = {};
     }
     filter.isDeleted = false;
     //打开数据库
-    return articleModel.find(filter);
+    return #name#Model.find(filter);
 };
 
 //删除一个用户
-Article.delete = function(id) {
-    return articleModel.update({
+#Name#.delete = function(id) {
+    return #name#Model.update({
         _id: id
     }, {
         isDeleted: true
     }).exec();
 };
 
-Article.getAll = function(page, filter) {
+#Name#.getAll = function(page, filter) {
     if (!filter) {
         filter = {};
     }
     filter.isDeleted = false;
-    var query = articleModel.count(filter);
+    var query = #name#Model.count(filter);
     return query.exec().then(function(count) {
         return query.find()
             .skip((page - 1) * gridlineCount)
             .limit(gridlineCount)
-            .exec().then(function(articles) {
-                return { articles: articles, count: count };
+            .exec().then(function(#name#s) {
+                return { #name#s: #name#s, count: count };
             });
     });
 };
 
-Article.deleteAll = function(ids) {
-    return articleModel.update({
+#Name#.deleteAll = function(ids) {
+    return #name#Model.update({
         _id: { $in: ids }
     }, {
         isDeleted: true
     }, { multi: true }).exec();
 };
 
-Article.publishAll = function(ids) {
-    return articleModel.update({
+#Name#.publishAll = function(ids) {
+    return #name#Model.update({
         _id: { $in: ids }
     }, {
         isPublish: true
     }, { multi: true }).exec();
 };
 
-Article.unPublishAll = function(ids) {
-    return articleModel.update({
+#Name#.unPublishAll = function(ids) {
+    return #name#Model.update({
         _id: { $in: ids }
     }, {
         isPublish: false

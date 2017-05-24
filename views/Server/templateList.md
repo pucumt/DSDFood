@@ -72,6 +72,6 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/default/assets/js/Server/articleList.js?v=1.000"></script>
+<script type="text/javascript" src="/default/assets/js/Server/#name#List.js?v=1.000"></script>
 <script type="text/javascript" src="/default/assets/js/moment.js"></script>
 {% endblock %}

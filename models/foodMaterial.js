@@ -7,7 +7,10 @@ var crypto = require('crypto'),
 var foodMaterialSchema = new mongoose.Schema({
     name: String,
     mainNameId: ObjectId, //学名，本身为学名则空
+    mainName: String,
     content: String,
+    isPublish: { type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false },
     createdDate: { type: Date, default: Date.now },
     createdBy: ObjectId
 }, {

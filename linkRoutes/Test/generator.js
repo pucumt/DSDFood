@@ -36,33 +36,47 @@ module.exports = function(app) {
         var objId = req.body.objId,
             objCase = objId[0].toUpperCase() + objId.substr(1);
         //generate models
-        var modelPath = path.join(root, "models/template4.md"),
-            targetPath = path.join(root, "models/" + objId + ".js");
-        readFile(modelPath, targetPath, function(str) {
-            var strResult = str.replace(/#name#/g, objId);
-            return strResult.replace(/#Name#/g, objCase);
-        });
+        // var modelPath = path.join(root, "models/template.md"),
+        //     targetPath = path.join(root, "models/" + objId + ".js");
+        // readFile(modelPath, targetPath, function(str) {
+        //     var strResult = str.replace(/#name#/g, objId);
+        //     return strResult.replace(/#Name#/g, objCase);
+        // });
         //generate routes
-        modelPath = path.join(root, "routes/Server/template4.md"),
-            targetPath = path.join(root, "routes/Server/" + objId + ".js");
-        readFile(modelPath, targetPath, function(str) {
-            var strResult = str.replace(/#name#/g, objId);
-            return strResult.replace(/#Name#/g, objCase);
-        });
+        // modelPath = path.join(root, "linkRoutes/Server/template4.md"),
+        //     targetPath = path.join(root, "linkRoutes/Server/" + objId + ".js");
+        // readFile(modelPath, targetPath, function(str) {
+        //     var strResult = str.replace(/#name#/g, objId);
+        //     return strResult.replace(/#Name#/g, objCase);
+        // });
         //generate views
-        // modelPath = path.join(root, "views/Server/template4.md"),
-        //     targetPath = path.join(root, "views/Server/" + objId + ".html"); // "List.html");
+        // modelPath = path.join(root, "views/Server/templateList.md"),
+        //     targetPath = path.join(root, "views/Server/" + objId + "List.html"); // "List.html");
+        // readFile(modelPath, targetPath, function(str) {
+        //     var strResult = str.replace(/#name#/g, objId);
+        //     return strResult.replace(/#Name#/g, objCase);
+        // });
+
+        // modelPath = path.join(root, "views/Server/templateEdit.md"),
+        //     targetPath = path.join(root, "views/Server/" + objId + "Edit.html"); // "List.html");
         // readFile(modelPath, targetPath, function(str) {
         //     var strResult = str.replace(/#name#/g, objId);
         //     return strResult.replace(/#Name#/g, objCase);
         // });
         //generate public js
-        // modelPath = path.join(root, "public/default/assets/js/template4.md"),
-        //     targetPath = path.join(root, "public/default/assets/js/Server/" + objId + ".js");
-        // readFile(modelPath, targetPath, function(str) {
-        //     var strResult = str.replace(/#name#/g, objId);
-        //     return strResult.replace(/#Name#/g, objCase);
-        // });
+        modelPath = path.join(root, "public/default/assets/js/Server/template.md"),
+            targetPath = path.join(root, "public/default/assets/js/Server/" + objId + "List.js");
+        readFile(modelPath, targetPath, function(str) {
+            var strResult = str.replace(/#name#/g, objId);
+            return strResult.replace(/#Name#/g, objCase);
+        });
+
+        modelPath = path.join(root, "public/default/assets/js/Server/template.edit.md"),
+            targetPath = path.join(root, "public/default/assets/js/Server/" + objId + ".edit.js");
+        readFile(modelPath, targetPath, function(str) {
+            var strResult = str.replace(/#name#/g, objId);
+            return strResult.replace(/#Name#/g, objCase);
+        });
         //readFile();
         //writeFile(file);
         res.render('Test/generator.html', {

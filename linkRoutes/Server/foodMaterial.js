@@ -8,7 +8,7 @@ module.exports = function(app) {
     app.get('/admin/foodMaterialList', checkLogin);
     app.get('/admin/foodMaterialList', function(req, res) {
         res.render('Server/foodMaterialList.html', {
-            title: '>文章列表',
+            title: '>食材列表',
             user: req.session.admin
         });
     });
@@ -16,7 +16,7 @@ module.exports = function(app) {
     app.get('/admin/foodMaterialList/add', checkLogin);
     app.get('/admin/foodMaterialList/add', function(req, res) {
         res.render('Server/foodMaterialEdit.html', {
-            title: '>文章编辑',
+            title: '>食材编辑',
             user: req.session.admin
         });
     });
@@ -24,7 +24,7 @@ module.exports = function(app) {
     app.get('/admin/foodMaterialList/id/:id', checkLogin);
     app.get('/admin/foodMaterialList/id/:id', function(req, res) {
         res.render('Server/foodMaterialEdit.html', {
-            title: '>文章编辑',
+            title: '>食材编辑',
             user: req.session.admin,
             id: req.params.id
         });
@@ -32,18 +32,28 @@ module.exports = function(app) {
 
     app.post('/admin/foodMaterialList/add', checkJSONLogin);
     app.post('/admin/foodMaterialList/add', function(req, res) {
-        var foodMaterial = new FoodMaterial({
-            name: req.body.name,
-            content: req.body.content,
-            createdBy: req.session.admin._id
-        });
-
-        foodMaterial.save().then(function(foodMaterial) {
-            if (foodMaterial) {
-                res.json({ sucess: true, id: foodMaterial._id });
+        var option = {
+                name: req.body.name,
+                content: req.body.content,
+                createdBy: req.session.admin._id
+            },
+            p = Promise.resolve();
+        if (req.body.mainName) {
+            p = FoodMaterial.getFilter({ name: req.body.mainName });
+        }
+        p.then(function(mainMaterial) {
+            if (mainMaterial) {
+                option.mainNameId = mainMaterial._id;
+                option.mainName = mainMaterial.name;
             }
-        }).catch(function(err) {
-            console.log(err);
+            var foodMaterial = new FoodMaterial(option);
+            foodMaterial.save().then(function(foodMaterial) {
+                if (foodMaterial) {
+                    res.json({ sucess: true, id: foodMaterial._id });
+                }
+            }).catch(function(err) {
+                console.log(err);
+            });
         });
     });
 
@@ -75,34 +85,43 @@ module.exports = function(app) {
         })
     });
 
-    app.post('/admin/foodMaterialList/delete', checkJSONLogin);
-    app.post('/admin/foodMaterialList/delete', function(req, res) {
-        // TrainClass.delete(req.body.id, function(err, trainClass) {
-        //     if (err) {
-        //         res.jsonp({ error: err });
-        //         return;
-        //     }
-        //     res.jsonp({ sucess: true });
-        // });
-    });
-
     app.post('/admin/foodMaterialList/publishAll', checkJSONLogin);
     app.post('/admin/foodMaterialList/publishAll', function(req, res) {
-        // TrainClass.publishAll(JSON.parse(req.body.ids), function(err, trainClass) {
-        //     if (err) {
-        //         res.jsonp({ error: err });
-        //         return;
-        //     }
-        //     res.jsonp({ sucess: true });
-        // });
+        FoodMaterial.publishAll(req.body.ids.split(",")).then(function(result) {
+            if (result && result.ok && result.nModified > 0) {
+                res.jsonp({ sucess: true });
+                return;
+            }
+            res.jsonp({ error: "没能发布！" });
+        }).catch(function(err) {
+            res.jsonp({ error: err });
+        });
     });
 
     app.post('/admin/foodMaterialList/deleteAll', checkJSONLogin);
     app.post('/admin/foodMaterialList/deleteAll', function(req, res) {
-        // TrainClass.deleteAll(JSON.parse(req.body.ids))
-        //     .then(function() {
-        //         res.jsonp({ sucess: true });
-        //     });
+        FoodMaterial.deleteAll(req.body.ids.split(",")).then(function(result) {
+            if (result && result.ok && result.nModified > 0) {
+                res.jsonp({ sucess: true });
+                return;
+            }
+            res.jsonp({ error: "没能删除！" });
+        }).catch(function(err) {
+            res.jsonp({ error: err });
+        });
+    });
+
+    app.post('/admin/foodMaterialList/unPublishAll', checkJSONLogin);
+    app.post('/admin/foodMaterialList/unPublishAll', function(req, res) {
+        FoodMaterial.unPublishAll(req.body.ids.split(",")).then(function(result) {
+            if (result && result.ok && result.nModified > 0) {
+                res.jsonp({ sucess: true });
+                return;
+            }
+            res.jsonp({ error: "没能停用！" });
+        }).catch(function(err) {
+            res.jsonp({ error: err });
+        });
     });
 
     app.post('/admin/foodMaterialList/search', checkJSONLogin);
