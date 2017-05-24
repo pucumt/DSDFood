@@ -17,24 +17,43 @@
 </head>
 
 <body>
-    <header class="guest-header">
-        <div class="logo pull-left">百分百</div>
-        <div class="menu-top pull-left">
-        </div>
-        <div class="userinfo pull-right">
-            用户: {{ user.name }}
-            <a href="/admin/logout">退出</a>
-        </div>
+    <header>
+        <center class="">
+            <div class="clearfix">
+                <div class="logo pull-left">百分百</div>
+                <div class="userinfo pull-left">
+                    用户: {{ user.name }}
+                    <a href="/admin/logout">退出</a>
+                </div>
+                <div class="menu-top pull-right">
+                    帮助中心
+                </div>
+            </div>
+        </center>
     </header>
-    <div class="guest-content">
-        <div class="admin-main">
-            {% block main %}{% endblock %}
-        </div>
+    <div class="search">
+        <center class="">
+            <div class="clearfix">
+                <span class="title pull-left">都市美食岛</span>
+                <span class="input-group pull-left">
+                    <input type="text" id="name" class="form-control" />
+                    <span class="input-group-btn">
+                        <button class="btn" type="button">搜索</button>
+                    </span>
+                </span>
+            </div>
+        </center>
     </div>
-    <footer class="guest-footer">
-        <div>
-            foot
-        </div>
+    <div class="content">
+        <center>
+            {% block main %}{% endblock %}
+        </center>
+    </div>
+    <footer class="">
+        <center>
+            <div>Copyright ©2017 dushidao.com.All Rights Reserved.</div>
+            <div>沪ICP备12002832号</div>
+        </center>
     </footer>
     {% block modal %}{% endblock %}
 </body>

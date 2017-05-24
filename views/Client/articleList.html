@@ -1,77 +1,19 @@
 {% extends "Client/partial/main.html" %} {% block main %}
-<div class="title">
-    <h1>
-        {{ title }}
-    </h1>
-</div>
-<div class="panel panel-default mainModal">
-    <div class="panel-body">
-        <form id="InfoSearch">
-            <div class="row form-horizontal">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="name" class="control-label">名称:</label>
-                        <input type="text" maxlength="30" class="form-control" name="name" id="name">
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <button type="button" id="btnSearch" class="btn btn-primary panelButton">查询</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<div class="toolbar">
-    <div class="toolbar-list form-inline">
-        <div class="checkbox">
-            <label>
-      <input type="checkbox" id="selectAll">全选
-    </label>
+<div class="articleList">
+    <div class="article">
+        <div class="title">
+            <h1>
+            </h1>
         </div>
-        <button id="btnAdd" class="btn btn-default btn-sm">新增</button>
-        <button id="btnDeleteAll" class="btn btn-default btn-sm">删除选中</button>
-        <button id="btnPublishAll" class="btn btn-default btn-sm">发布选中</button>
-        <button id="btnStopAll" class="btn btn-default btn-sm">停用选中</button>
+        <div class="detail">
+        </div>
     </div>
-</div>
-<div class="content mainModal">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>文章名称</th>
-                <th style="width:80px">状态</th>
-                <th style="width:160px">时间</th>
-                <th style="width:100px">操作</th>
-            </tr>
-        </thead>
-        <tbody id="gridBody">
-        </tbody>
-    </table>
 </div>
 <div id="mainModal">
     <input type="hidden" id="total" value="0" />
-    <input type="hidden" id="page" value="0" /> {% include "Server/partial/popuppaging.html" %}
-</div> {% endblock %} {% block modal %}
-
-<!-- Modal -->
-<div class="modal fade bs-example-modal-sm" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="confirmModalLabel">确认</h4>
-            </div>
-            <div class="modal-body">
-                出错了?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" id="btnConfirmSave" class="btn btn-primary">确定</button>
-            </div>
-        </div>
-    </div>
+    <input type="hidden" id="page" value="{{ page }}" /> {% include "Client/partial/popuppaging.html" %}
 </div>
-
-<script type="text/javascript" src="/default/assets/js/Server/articleList.js?v=1.000"></script>
+{% endblock %} {% block modal %}
+<script type="text/javascript" src="/default/assets/js/Client/articleList.js?v=1.000"></script>
 <script type="text/javascript" src="/default/assets/js/moment.js"></script>
 {% endblock %}
