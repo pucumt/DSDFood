@@ -7,6 +7,19 @@ $(document).ready(function() {
     $("#confirmModal").css("overflow", "hidden"); //禁止模态对话框的半透明背景滚动
     $("#confirmModal").find(".modal-body").css("overflow-y", "auto"); //竖滚动条自动出现
     // var editor = new WPEditor($("#articleContent"));
+
+    $(".mainModal").on("change", ".desImgDiv .desImg", function(e) {
+        var imglist = $(e.currentTarget).prev().empty();
+        var fileList = this.files;
+        if (fileList.length > 0) {
+            for (var i = 0; i < fileList.length; i++) {
+                var img = $("<img style='max-width:100%' />");
+                imglist.append(img);
+                img.attr("src", window.URL.createObjectURL(fileList[i]));
+            }
+        };
+    });
+
     var cloneStep = $(".step").clone(),
         cloneFood = $(".food").clone();
 
@@ -25,7 +38,7 @@ $(document).ready(function() {
         var fileList = this.files;
         if (fileList.length > 0) {
             for (var i = 0; i < fileList.length; i++) {
-                var img = $("<img />");
+                var img = $("<img style='max-width:100%' />");
                 imglist.append(img);
                 img.attr("src", window.URL.createObjectURL(fileList[i]));
             }
@@ -52,6 +65,7 @@ $(document).ready(function() {
         var postURI = "/admin/articleList/add",
             postObj = {
                 name: $.trim($('.mainModal #name').val()),
+                description: $.trim($('.mainModal #description').html()),
                 food: getFoods(),
                 content: getContents()
             };
@@ -129,7 +143,7 @@ $(document).ready(function() {
         if (images && images != "") {
             var imgArray = images.split(",");
             for (var i = 0; i < imgArray.length; i++) {
-                var img = $("<img />");
+                var img = $("<img style='max-width:100%' />");
                 listDiv.append(img);
                 img.attr("src", "/uploads/images/" + imgArray[i]);
             }
@@ -140,6 +154,7 @@ $(document).ready(function() {
         $.post("/admin/articleList/id/" + $("#id").val(), function(data) {
             if (data) {
                 $('.mainModal #name').val(data.name);
+                $('.mainModal #description').html(data.description);
                 if (data.food && data.food.length > 0) {
                     $(".mainModal .food [name='foodName']").val(data.food[0].foodName);
                     $(".mainModal .food [name='foodWeight']").val(data.food[0].foodWeight);
@@ -154,6 +169,7 @@ $(document).ready(function() {
                     for (var i = 1; i < data.content.length; i++) {
                         setContents(data.content[i]);
                     }
+                    resetStepName();
                 }
             } else {
                 showAlert("获取文章出错！");

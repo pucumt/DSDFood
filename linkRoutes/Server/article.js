@@ -34,6 +34,8 @@ module.exports = function(app) {
     app.post('/admin/articleList/add', function(req, res) {
         var article = new Article({
             name: req.body.name,
+            description: req.body.description,
+            desImg: req.body.desImg,
             food: JSON.parse(req.body.food),
             content: JSON.parse(req.body.content),
             createdBy: req.session.admin._id
@@ -52,6 +54,8 @@ module.exports = function(app) {
     app.post('/admin/articleList/edit', function(req, res) {
         var article = new Article({
             name: req.body.name,
+            description: req.body.description,
+            desImg: req.body.desImg,
             food: JSON.parse(req.body.food),
             content: JSON.parse(req.body.content),
             createdBy: req.session.admin._id

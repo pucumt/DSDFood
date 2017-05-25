@@ -6,6 +6,8 @@ var crypto = require('crypto'),
 
 var articleSchema = new mongoose.Schema({
     name: String, //email
+    description: String, //简介
+    desImg: String, //图片
     food: [{
         foodName: String,
         foodWeight: String,
