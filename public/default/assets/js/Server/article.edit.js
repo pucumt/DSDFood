@@ -62,6 +62,24 @@ $(document).ready(function() {
     $(".toolbar #btnSave").on("click", function(e) {
         // var validator = $('.mainModal').data('formValidation').validate();
         // if (validator.isValid()) {
+        var file = document.getElementById('upfile').files;
+        var formData = new FormData();
+        if (file.length > 0) {
+            formData.append("avatar", file[0]);
+            formData.append("name", $.trim($('.mainModal #name').val()));
+            formData.append("description", $.trim($('.mainModal #description').html()));
+            formData.append("food", getFoods());
+            formData.append("content", getContents());
+        }
+        //  $.ajax({
+        //                 type: "POST",
+        //                 data: formData,
+        //                 url: "/admin/score",
+        //                 contentType: false,
+        //                 processData: false,
+        //             }).then(function(data) {
+        //                 location.href = "/admin/score";
+        //             });
         var postURI = "/admin/articleList/add",
             postObj = {
                 name: $.trim($('.mainModal #name').val()),

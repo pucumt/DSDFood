@@ -2,7 +2,9 @@ var Article = require('../../models/article.js'),
     auth = require("./auth"),
     settings = require('../../settings.js'),
     checkJSONLogin = auth.checkJSONLogin,
-    checkLogin = auth.checkLogin;
+    checkLogin = auth.checkLogin,
+    multer = require('multer'),
+    upload = multer({ dest: 'uploads/' });
 
 module.exports = function(app) {
     app.get('/admin/articleList', checkLogin);
@@ -30,8 +32,9 @@ module.exports = function(app) {
         });
     });
 
+    var cpUpload = upload.fields([{ name: 'desImg', maxCount: 1 }, { name: 'stepImgs', maxCount: 15 }]);
     app.post('/admin/articleList/add', checkJSONLogin);
-    app.post('/admin/articleList/add', function(req, res) {
+    app.post('/admin/articleList/add', cpUpload, function(req, res) {
         var article = new Article({
             name: req.body.name,
             description: req.body.description,
@@ -51,7 +54,7 @@ module.exports = function(app) {
     });
 
     app.post('/admin/articleList/edit', checkJSONLogin);
-    app.post('/admin/articleList/edit', function(req, res) {
+    app.post('/admin/articleList/edit', cpUpload, function(req, res) {
         var article = new Article({
             name: req.body.name,
             description: req.body.description,
@@ -142,4 +145,14 @@ module.exports = function(app) {
             });
         });
     });
+
+    // app.post('/cool-profile', cpUpload, function(req, res, next) {
+    //     // req.files 是一个对象 (String -> Array) 键是文件名, 值是文件数组
+    //     //
+    //     // 例如：
+    //     //  req.files['avatar'][0] -> File
+    //     //  req.files['gallery'] -> Array
+    //     //
+    //     // req.body 将具有文本域数据, 如果存在的话
+    // })
 }
