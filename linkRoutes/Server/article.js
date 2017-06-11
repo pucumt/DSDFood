@@ -4,7 +4,7 @@ var Article = require('../../models/article.js'),
     checkJSONLogin = auth.checkJSONLogin,
     checkLogin = auth.checkLogin,
     multer = require('multer'),
-    upload = multer({ dest: 'uploads/' });
+    upload = multer({ dest: 'public/uploads/' });
 
 module.exports = function(app) {
     app.get('/admin/articleList', checkLogin);
@@ -35,14 +35,26 @@ module.exports = function(app) {
     var cpUpload = upload.fields([{ name: 'desImg', maxCount: 1 }, { name: 'stepImgs', maxCount: 15 }]);
     app.post('/admin/articleList/add', checkJSONLogin);
     app.post('/admin/articleList/add', cpUpload, function(req, res) {
-        var article = new Article({
+        var option = {
             name: req.body.name,
             description: req.body.description,
-            desImg: req.body.desImg,
+            desImg: req.files.desImg[0].filename,
             food: JSON.parse(req.body.food),
             content: JSON.parse(req.body.content),
             createdBy: req.session.admin._id
+        };
+        option.content.forEach(function(singleStep) {
+            var imgs = singleStep.stepImages;
+            if (imgs != "") {
+                singleStep.stepImages = imgs.split(",").map(function(img) {
+                    return req.files.stepImgs.filter(function(filter) {
+                        return filter.originalname == img;
+                    })[0].filename;
+                }).join(",");
+            }
         });
+
+        var article = new Article(option);
 
         article.save().then(function(article) {
             if (article) {
@@ -55,22 +67,47 @@ module.exports = function(app) {
 
     app.post('/admin/articleList/edit', checkJSONLogin);
     app.post('/admin/articleList/edit', cpUpload, function(req, res) {
-        var article = new Article({
-            name: req.body.name,
-            description: req.body.description,
-            desImg: req.body.desImg,
-            food: JSON.parse(req.body.food),
-            content: JSON.parse(req.body.content),
-            createdBy: req.session.admin._id
-        });
+        Article.get(req.body.id)
+            .then(function(article) {
+                var option = {
+                    name: req.body.name,
+                    description: req.body.description,
+                    food: JSON.parse(req.body.food),
+                    content: JSON.parse(req.body.content),
+                    createdBy: req.session.admin._id
+                };
 
-        article.update(req.body.id).then(function(result) {
-            if (result && result.ok && result.nModified == 1) {
-                res.json({ sucess: true, id: req.body.id });
-            }
-        }).catch(function(err) {
-            console.log(err);
-        });
+                if (req.files.desImg && req.files.desImg.length > 0) {
+                    option.desImg = req.files.desImg[0].filename;
+                }
+
+                option.content.forEach(function(singleStep) {
+                    var imgs = singleStep.stepImages;
+                    if (imgs != "") {
+                        singleStep.stepImages = imgs.split(",").map(function(img) {
+                            if (req.files.stepImgs) {
+                                var imgArray = req.files.stepImgs.filter(function(filter) {
+                                    return filter.originalname == img;
+                                });
+                                if (imgArray.length > 0) {
+                                    return imgArray[0].filename;
+                                }
+                            }
+                            return img;
+                        }).join(",");
+                    }
+                });
+
+                var article = new Article(option);
+
+                article.update(req.body.id).then(function(result) {
+                    if (result && result.ok && result.nModified == 1) {
+                        res.json({ sucess: true, id: req.body.id });
+                    }
+                }).catch(function(err) {
+                    console.log(err);
+                });
+            });
     });
 
     app.post('/admin/articleList/id/:id', checkJSONLogin);

@@ -95,4 +95,27 @@ footer {
 
 .articleList .article {
     text-align: left;
+    padding: 20px 0;
+    border-top: 1px solid #e6e8eb;
+}
+
+.articleList .article:first-child {
+    border-top: 0;
+}
+
+.articleList .article .img {
+    float: left;
+}
+
+.articleList .article .info {
+    margin-left: 320px;
+    word-break: break-all;
+}
+
+.articleList .article .img img {
+    width: 300px;
+}
+
+.articleList .article .info .title h1 {
+    margin-top: 0;
 }

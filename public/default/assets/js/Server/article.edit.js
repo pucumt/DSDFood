@@ -13,7 +13,7 @@ $(document).ready(function() {
         var fileList = this.files;
         if (fileList.length > 0) {
             for (var i = 0; i < fileList.length; i++) {
-                var img = $("<img style='max-width:100%' />");
+                var img = $("<img style='max-width:500px; display: block;' />");
                 imglist.append(img);
                 img.attr("src", window.URL.createObjectURL(fileList[i]));
             }
@@ -38,7 +38,7 @@ $(document).ready(function() {
         var fileList = this.files;
         if (fileList.length > 0) {
             for (var i = 0; i < fileList.length; i++) {
-                var img = $("<img style='max-width:100%' />");
+                var img = $("<img style='max-width:500px; display: block;' />");
                 imglist.append(img);
                 img.attr("src", window.URL.createObjectURL(fileList[i]));
             }
@@ -60,38 +60,37 @@ $(document).ready(function() {
     });
 
     $(".toolbar #btnSave").on("click", function(e) {
-        // var validator = $('.mainModal').data('formValidation').validate();
-        // if (validator.isValid()) {
-        var file = document.getElementById('upfile').files;
+        var postURI = "/admin/articleList/add";
+        var file = $('.desImgDiv .desImg')[0].files;
         var formData = new FormData();
         if (file.length > 0) {
-            formData.append("avatar", file[0]);
-            formData.append("name", $.trim($('.mainModal #name').val()));
-            formData.append("description", $.trim($('.mainModal #description').html()));
-            formData.append("food", getFoods());
-            formData.append("content", getContents());
+            formData.append("desImg", file[0]);
         }
-        //  $.ajax({
-        //                 type: "POST",
-        //                 data: formData,
-        //                 url: "/admin/score",
-        //                 contentType: false,
-        //                 processData: false,
-        //             }).then(function(data) {
-        //                 location.href = "/admin/score";
-        //             });
-        var postURI = "/admin/articleList/add",
-            postObj = {
-                name: $.trim($('.mainModal #name').val()),
-                description: $.trim($('.mainModal #description').html()),
-                food: getFoods(),
-                content: getContents()
-            };
+        formData.append("name", $.trim($('.mainModal #name').val()));
+        formData.append("description", $.trim($('.mainModal #description').html()));
+        formData.append("food", getFoods());
+        formData.append("content", getContents());
+
+        $('.mainModal .pic').each(function(index) {
+            if (this.files.length > 0) {
+                for (var i = 0; i < this.files.length; i++) {
+                    formData.append("stepImgs", this.files[i]);
+                };
+            }
+        });
+
         if ($("#id").val() != "") {
             postURI = "/admin/articleList/edit";
-            postObj.id = $('#id').val();
+            formData.append("id", $('#id').val());
         }
-        $.post(postURI, postObj, function(data) {
+
+        $.ajax({
+            type: "POST",
+            data: formData,
+            url: "/admin/articleList/edit",
+            contentType: false,
+            processData: false,
+        }).then(function(data) {
             if (data && data.sucess) {
                 showAlert("保存成功！");
                 $("#id").val(data.id);
@@ -99,7 +98,6 @@ $(document).ready(function() {
                 showAlert("保存出错！");
             }
         });
-        // }
     });
 
     function getFoods() {
@@ -131,7 +129,7 @@ $(document).ready(function() {
             if (description != "") {
                 contents.push({
                     stepDescription: description,
-                    stepImages: getFileNames($(this).find(".pic").prop('files'))
+                    stepImages: getFileNames($(this).find(".pic").prop('files'), this)
                 });
             }
         });
@@ -146,24 +144,28 @@ $(document).ready(function() {
         $(".mainModal .steplist").append(stepDiv);
     };
 
-    function getFileNames(files) {
+    function getFileNames(files, step) {
+        var names = [];
         if (files && files.length > 0) {
-            var names = [];
             for (var i = 0; i < files.length; i++) {
                 names.push(files[i].name);
             }
             return names.join(",");
         }
-        return "";
+
+        $(step).find(".imglist img").each(function(index) {
+            names.push($(this).attr("src").substr(9));
+        });
+        return names.join(",");
     };
 
     function setOnlineImages(images, listDiv) {
         if (images && images != "") {
             var imgArray = images.split(",");
             for (var i = 0; i < imgArray.length; i++) {
-                var img = $("<img style='max-width:100%' />");
+                var img = $("<img style='max-width:500px; display: block;' />");
                 listDiv.append(img);
-                img.attr("src", "/uploads/images/" + imgArray[i]);
+                img.attr("src", "/uploads/" + imgArray[i]);
             }
         }
     };
@@ -173,6 +175,7 @@ $(document).ready(function() {
             if (data) {
                 $('.mainModal #name').val(data.name);
                 $('.mainModal #description').html(data.description);
+                setOnlineImages(data.desImg, $(".desImgDiv .imglist"));
                 if (data.food && data.food.length > 0) {
                     $(".mainModal .food [name='foodName']").val(data.food[0].foodName);
                     $(".mainModal .food [name='foodWeight']").val(data.food[0].foodWeight);

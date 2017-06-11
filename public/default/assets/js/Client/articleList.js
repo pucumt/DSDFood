@@ -19,7 +19,9 @@ function searchArticle(p) {
         if (data && data.articles.length > 0) {
             var d = $(document.createDocumentFragment());
             data.articles.forEach(function(article) {
-                var trObject = $('<div class="article"><div class="title"><h1>' + article.name + '</h1></div><div class="detail">' + article.content[0].stepDescription + '</div></div>');
+                var trObject = $('<div class="article clearfix"><div class="img"><img src="/uploads/' + article.desImg +
+                    '"></div><div class="info"><div class="title"><h1>' + article.name + '</h1></div><div class="desc">' +
+                    article.description + '</div></div></div>');
                 d.append(trObject);
             });
             $mainSelectBody.append(d);
