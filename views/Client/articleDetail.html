@@ -1,0 +1,33 @@
+{% extends "Client/partial/main.html" %} {% block main %}
+<div class="article-title">
+    <h1>
+    </h1>
+    <input type="hidden" id="id" value="{{ id }}" />
+</div>
+<div class="mainModal">
+    <div class="article-content">
+        <div class="row">
+            <div class="col-md-24">
+                <div class="description">
+                </div>
+                <div class="img desImg">
+                    <img src="/uploads/" />
+                </div>
+            </div>
+        </div>
+        <div class="row food">
+            <div class="title">
+                <h3>食材</h3>
+            </div>
+        </div>
+        <div class="row contents">
+            <div class="title">
+                <h3>方法/步骤</h3>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% block modal %}
+<!-- Modal -->
+<script type="text/javascript" src="/default/assets/js/Client/article.detail.js?v=1.000"></script>
+{% endblock %}

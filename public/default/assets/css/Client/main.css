@@ -93,6 +93,10 @@ footer {
     border-top: 1px solid #FF6704;
 }
 
+.content .mainModal {
+    margin-bottom: 20px;
+}
+
 .articleList .article {
     text-align: left;
     padding: 20px 0;
@@ -118,4 +122,24 @@ footer {
 
 .articleList .article .info .title h1 {
     margin-top: 0;
+}
+
+.content .article-title,
+.content .article-content {
+    text-align: left;
+}
+
+.content .article-content img {
+    max-width: 750px;
+    display: block;
+}
+
+.content .article-content .food,
+.content .article-content .contents {
+    margin-top: 20px;
+}
+
+.content .article-content .food .title,
+.content .article-content .contents .title {
+    border-bottom: 1px solid #e6e8eb;
 }

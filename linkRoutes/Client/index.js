@@ -6,11 +6,11 @@
     checkLogin = auth.checkLogin;;
 
 module.exports = function(app) {
-    app.get('/', checkLogin)
+    // app.get('/', checkLogin)
     app.get('/', function(req, res) {
         res.render('Client/articleList.html', {
             title: '主页',
-            user: req.session.admin
+            user: req.session.user
         });
     });
 

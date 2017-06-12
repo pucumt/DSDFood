@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>百分百</title>
+    <title>都市岛</title>
     <link rel="stylesheet" href="/default/assets/css/bootstrap.css">
     <link rel="stylesheet" href="/default/assets/css/Client/main.css">
     <link rel="stylesheet" href="/default/assets/css/jquery-ui.min.css">
@@ -20,11 +20,13 @@
     <header>
         <center class="">
             <div class="clearfix">
-                <div class="logo pull-left">百分百</div>
+                <div class="logo pull-left">都市岛</div>
+                {% if user %}
                 <div class="userinfo pull-left">
                     用户: {{ user.name }}
                     <a href="/admin/logout">退出</a>
                 </div>
+                {% endif %}
                 <div class="menu-top pull-right">
                     帮助中心
                 </div>
