@@ -87,7 +87,7 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             data: formData,
-            url: "/admin/articleList/edit",
+            url: postURI,
             contentType: false,
             processData: false,
         }).then(function(data) {
